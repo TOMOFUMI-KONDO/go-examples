@@ -23,4 +23,5 @@ func main() {
 	log.Println("Status:", resp.Status)
 	log.Println("StatusCode:", resp.StatusCode)
 	log.Println("Headers:", resp.Header)
+	log.Println("Content-Type:", resp.Header.Get("Content-Type"))
 }
