@@ -13,7 +13,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
 	}
 	fmt.Println(string(dump))
-	fmt.Fprintf(w, "<html><body>hello</body></html>\n")
+
+	fmt.Fprintf(w, "<html><body>"+r.URL.Query().Get("query")+"</body></html>\n")
 }
 
 func main() {
