@@ -9,10 +9,10 @@ import (
 
 func main() {
 	values := url.Values{
-		"query": {"hello http"},
+		"test": {"value"},
 	}
 
-	resp, err := http.Head("http://localhost:18888" + "?" + values.Encode())
+	resp, err := http.PostForm("http://localhost:18888", values)
 	if err != nil {
 		panic(err)
 	}
