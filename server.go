@@ -14,8 +14,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(string(dump))
 
-	fmt.Println(r.PostFormValue("test"))
-	fmt.Fprintf(w, "<html><body>"+r.PostForm.Get("test")+"</body></html>\n")
+	fmt.Fprintf(w, "<html><body><h1>Helleo HTTP!</body></html>\n")
 }
 
 func main() {
