@@ -1,16 +1,34 @@
 package main
 
 import (
+	"bytes"
+	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
-	"strings"
+	"os"
 )
 
 func main() {
-	reader := strings.NewReader("テキスト")
+	var buffer bytes.Buffer
+	writer := multipart.NewWriter(&buffer)
+	writer.WriteField("name", "Michael Jackson")
 
-	resp, err := http.Post("http://localhost:18888", "text/plain", reader)
+	fileWriter, err := writer.CreateFormFile("text-file", "text.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	readFile, err := os.Open("text.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer readFile.Close()
+	io.Copy(fileWriter, readFile)
+	writer.Close()
+
+	resp, err := http.Post("http://localhost:18888", writer.FormDataContentType(), &buffer)
 	if err != nil {
 		panic(err)
 	}
