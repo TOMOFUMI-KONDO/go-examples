@@ -1,53 +1,36 @@
 package main
 
 import (
-	"bytes"
-	"io"
-	"io/ioutil"
 	"log"
-	"mime/multipart"
 	"net/http"
-	"net/textproto"
-	"os"
+	"net/http/cookiejar"
+	"net/http/httputil"
 )
 
 func main() {
-	var buffer bytes.Buffer
-	writer := multipart.NewWriter(&buffer)
-	writer.WriteField("name", "Michael Jackson")
-
-	part := make(textproto.MIMEHeader)
-	part.Set("Content-Type", "text/plain")
-	part.Set("Content-Disposition", `form-data; name="text-file"; filename="text.txt"`)
-
-	fileWriter, err := writer.CreatePart(part)
+	jar, err := cookiejar.New(nil)
 	if err != nil {
 		panic(err)
 	}
 
-	readFile, err := os.Open("text.txt")
-	if err != nil {
-		panic(nil)
+	client := http.Client{
+		Jar: jar,
 	}
 
-	io.Copy(fileWriter, readFile)
+	for i := 0; i < 2; i++ {
+		resp, err := client.Get("http://localhost:18888/cookie")
+		if err != nil {
+			panic(err)
+		}
 
-	writer.Close()
+		dump, err := httputil.DumpResponse(resp, true)
+		if err != nil {
+			panic(err)
+		}
 
-	resp, err := http.Post("http://localhost:18888", writer.FormDataContentType(), &buffer)
-	if err != nil {
-		panic(err)
+		log.Println(string(dump))
+		log.Println("Status:", resp.Status)
+		log.Println("StatusCode:", resp.StatusCode)
+		log.Println("Headers:", resp.Header)
 	}
-
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	log.Println(string(body))
-	log.Println("Status:", resp.Status)
-	log.Println("StatusCode:", resp.StatusCode)
-	log.Println("Headers:", resp.Header)
 }
