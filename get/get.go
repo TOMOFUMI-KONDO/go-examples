@@ -3,34 +3,34 @@ package main
 import (
 	"log"
 	"net/http"
-	"net/http/cookiejar"
 	"net/http/httputil"
+	"net/url"
 )
 
 func main() {
-	jar, err := cookiejar.New(nil)
+	proxyUrl, err := url.Parse("http://user:pass@localhost:18888")
+	if err != nil {
+		panic(nil)
+	}
+
+	client := http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(proxyUrl),
+		},
+	}
+
+	resp, err := client.Get("http://github.com")
 	if err != nil {
 		panic(err)
 	}
 
-	client := http.Client{
-		Jar: jar,
+	dump, err := httputil.DumpResponse(resp, true)
+	if err != nil {
+		panic(err)
 	}
 
-	for i := 0; i < 2; i++ {
-		resp, err := client.Get("http://localhost:18888/cookie")
-		if err != nil {
-			panic(err)
-		}
-
-		dump, err := httputil.DumpResponse(resp, true)
-		if err != nil {
-			panic(err)
-		}
-
-		log.Println(string(dump))
-		log.Println("Status:", resp.Status)
-		log.Println("StatusCode:", resp.StatusCode)
-		log.Println("Headers:", resp.Header)
-	}
+	log.Println(string(dump))
+	log.Println("Status:", resp.Status)
+	log.Println("StatusCode:", resp.StatusCode)
+	log.Println("Headers:", resp.Header)
 }
