@@ -4,24 +4,18 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
 )
 
 func main() {
-	proxyUrl, err := url.Parse("http://user:pass@localhost:18888")
+	transport := &http.Transport{}
+	transport.RegisterProtocol("file", http.NewFileTransport(http.Dir(".")))
+	client := http.Client{
+		Transport: transport,
+	}
+
+	resp, err := client.Get("file://./text.txt")
 	if err != nil {
 		panic(nil)
-	}
-
-	client := http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyURL(proxyUrl),
-		},
-	}
-
-	resp, err := client.Get("http://github.com")
-	if err != nil {
-		panic(err)
 	}
 
 	dump, err := httputil.DumpResponse(resp, true)
