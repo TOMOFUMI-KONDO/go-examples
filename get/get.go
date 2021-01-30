@@ -4,19 +4,22 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
-	"strings"
+	"os"
 )
 
 func main() {
-	values := url.Values{"test": {"value"}}
-	reader := strings.NewReader(values.Encode())
-
 	client := &http.Client{}
-	request, err := http.NewRequest("DELETE", "http://localhost:18888", reader)
+	readFile, err := os.Open("text.txt")
 	if err != nil {
 		panic(nil)
 	}
+
+	request, err := http.NewRequest("POST", "http://localhost:18888", readFile)
+	if err != nil {
+		panic(nil)
+	}
+
+	request.Header.Add("Content-Type", "text/plain")
 
 	resp, err := client.Do(request)
 	if err != nil {
