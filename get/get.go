@@ -1,27 +1,23 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"net/http/httputil"
-	"os"
+	"time"
 )
 
 func main() {
-	client := &http.Client{}
-	readFile, err := os.Open("text.txt")
+	timeOutContext, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	request, err := http.NewRequestWithContext(timeOutContext, "GET", "http://localhost:18888/slow-page", nil)
 	if err != nil {
 		panic(nil)
 	}
 
-	request, err := http.NewRequest("POST", "http://localhost:18888", readFile)
-	if err != nil {
-		panic(nil)
-	}
-
-	request.Header.Add("Content-Type", "text/plain")
-
-	resp, err := client.Do(request)
+	resp, err := http.DefaultClient.Do(request)
 	if err != nil {
 		panic(nil)
 	}

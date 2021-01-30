@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"time"
 )
 
 func dumpRequest(w http.ResponseWriter, r *http.Request) {
@@ -32,10 +33,19 @@ func cookieHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func slowHandler(w http.ResponseWriter, r *http.Request) {
+	dumpRequest(w, r)
+
+	time.Sleep(time.Second * 10)
+
+	fmt.Fprintf(w, "<html><body>This is a slow page.</body></html>")
+}
+
 func main() {
 	var httpServer http.Server
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/cookie", cookieHandler)
+	http.HandleFunc("/slow-page", slowHandler)
 	log.Println("start http listening :18888")
 	httpServer.Addr = ":18888"
 	log.Println(httpServer.ListenAndServe())
