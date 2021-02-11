@@ -1,4 +1,5 @@
 .idea
 build
 tls/*
-!tls/tls.go
+!tls/tlsClient.go
+!tls/tlsServer.go
