@@ -3,3 +3,4 @@ build
 tls/*
 !tls/tlsClient.go
 !tls/tlsServer.go
+.env
