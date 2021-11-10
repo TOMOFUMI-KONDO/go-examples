@@ -5,17 +5,18 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
+	"log"
 
 	"github.com/lucas-clemente/quic-go"
 )
 
 func main() {
-	if err := client(); err != nil {
-		panic(err)
+	if err := clientMain(); err != nil {
+		log.Fatal(err)
 	}
 }
 
-func client() error {
+func clientMain() error {
 	tlsConf := &tls.Config{
 		InsecureSkipVerify: true,
 		NextProtos:         []string{"quic-echo-example"},

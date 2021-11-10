@@ -16,7 +16,9 @@ import (
 )
 
 func main() {
-	log.Fatal(echoServer())
+	if err := echoServer(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func echoServer() error {
@@ -25,18 +27,22 @@ func echoServer() error {
 		return err
 	}
 
-	for {
-		sess, err := listener.Accept(context.Background())
-		if err != nil {
-			return err
-		}
-		stream, err := sess.AcceptStream(context.Background())
-		if err != nil {
-			return err
-		}
-		_, err = io.Copy(loggingWriter{stream}, stream)
+	fmt.Printf("listening %s\n", addr)
+	sess, err := listener.Accept(context.Background())
+	if err != nil {
 		return err
 	}
+	stream, err := sess.AcceptStream(context.Background())
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(loggingWriter{stream}, stream)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func generateTLSConfig() *tls.Config {
