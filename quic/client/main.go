@@ -3,12 +3,22 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"flag"
 	"fmt"
 	"io"
 	"log"
 
 	"github.com/lucas-clemente/quic-go"
 )
+
+var (
+	addr string
+)
+
+func init() {
+	flag.StringVar(&addr, "addr", "localhost:4430", "server addr")
+	flag.Parse()
+}
 
 func main() {
 	if err := clientMain(); err != nil {
