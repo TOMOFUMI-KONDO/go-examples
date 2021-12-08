@@ -1,5 +1,9 @@
+# IDE config
 .idea
-build
-tls/*
-!tls/tlsClient.go
-!tls/tlsServer.go
+
+# Built file
+build/
+bin/
+
+# Env file
+.env
