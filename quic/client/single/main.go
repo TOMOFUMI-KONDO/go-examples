@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/lucas-clemente/quic-go"
 )
@@ -16,15 +17,22 @@ var (
 )
 
 func init() {
-	flag.StringVar(&addr, "addr", "localhost:4430", "server address")
+	flag.StringVar(&addr, "addr", "localhost:44300", "server address")
 	flag.Parse()
 }
 
 func main() {
+	w, err := os.Create("keylog.txt")
+	if err != nil {
+		panic(err)
+	}
+
 	tlsConf := &tls.Config{
 		InsecureSkipVerify: true,
 		NextProtos:         []string{"quic-echo-example"},
+		KeyLogWriter:       w,
 	}
+
 	session, err := quic.DialAddr(addr, tlsConf, nil)
 	if err != nil {
 		panic(err)
