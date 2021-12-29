@@ -16,7 +16,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&addr, "addr", ":4430", "server address")
+	flag.StringVar(&addr, "addr", ":44300", "server address")
 	flag.Parse()
 }
 
