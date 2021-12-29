@@ -1,8 +1,9 @@
-module github.com/TOMOFUMI-KONDO/real-world-http
+module github.com/TOMOFUMI-KONDO/go-sandbox
 
 go 1.17
 
 require (
+	github.com/gorilla/websocket v1.4.2
 	github.com/k0kubun/pp v3.0.1+incompatible
 	github.com/lucas-clemente/quic-go v0.24.0
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
@@ -12,7 +13,6 @@ require (
 	github.com/cheekybits/genny v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/marten-seemann/qtls-go1-16 v0.1.4 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.0 // indirect
