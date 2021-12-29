@@ -6,54 +6,46 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
 
 	"github.com/lucas-clemente/quic-go"
 )
 
 var (
-	addr string
+	message = "hello"
+	addr    string
 )
 
 func init() {
-	flag.StringVar(&addr, "addr", "localhost:4430", "server addr")
+	flag.StringVar(&addr, "addr", "localhost:4430", "server address")
 	flag.Parse()
 }
 
 func main() {
-	if err := clientMain(); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func clientMain() error {
 	tlsConf := &tls.Config{
 		InsecureSkipVerify: true,
 		NextProtos:         []string{"quic-echo-example"},
 	}
 	session, err := quic.DialAddr(addr, tlsConf, nil)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	stream, err := session.OpenStreamSync(context.Background())
 	if err != nil {
-		return err
+		panic(err)
 	}
+	defer stream.Close()
 
-	message := "hello"
-	fmt.Printf("Client: Sending '%s'\n", message)
+	fmt.Printf("send: '%s'\n", message)
 	_, err = stream.Write([]byte(message))
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	buf := make([]byte, len(message))
 	_, err = io.ReadFull(stream, buf)
-	if err != nil {
-		return err
+	if err != nil && err != io.EOF {
+		panic(err)
 	}
-	fmt.Printf("Client: Got '%s'\n", buf)
-
-	return nil
+	fmt.Printf("got: '%s'\n", buf)
 }
