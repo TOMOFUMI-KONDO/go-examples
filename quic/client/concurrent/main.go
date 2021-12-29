@@ -31,7 +31,7 @@ func main() {
 	for i := 0; i < 100; i++ {
 		wg.Add(1)
 
-		go func() {
+		go func(i int) {
 			session, err := quic.DialAddr(addr, tlsConf, nil)
 			if err != nil {
 				panic(err)
@@ -43,7 +43,7 @@ func main() {
 			}
 			defer stream.Close()
 
-			fmt.Printf("send: '%s'\n", message)
+			fmt.Printf("%d send: '%s'\n", i, message)
 			_, err = stream.Write([]byte(message))
 			if err != nil {
 				panic(err)
@@ -57,10 +57,10 @@ func main() {
 				}
 				panic(err)
 			}
-			fmt.Printf("got: '%s'\n", buf)
+			fmt.Printf("%d got: '%s'\n", i, buf)
 
 			wg.Add(-1)
-		}()
+		}(i + 1)
 	}
 
 	wg.Wait()

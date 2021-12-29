@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	tls "github.com/TOMOFUMI-KONDO/go-sandbox/quic/server"
 	"io"
 
 	"github.com/lucas-clemente/quic-go"
@@ -23,7 +24,7 @@ func main() {
 	// make listener, specifying addr and tls config.
 	// QUIC needs to be used with TLS.
 	// see: https://www.rfc-editor.org/rfc/rfc9001.html
-	listener, err := quic.ListenAddr(addr, GenerateTLSConfig(), nil)
+	listener, err := quic.ListenAddr(addr, tls.GenerateTLSConfig(), nil)
 	if err != nil {
 		panic(err)
 	}

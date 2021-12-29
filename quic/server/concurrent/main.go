@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"sync"
 
+	"github.com/TOMOFUMI-KONDO/go-sandbox/quic/server"
 	"github.com/lucas-clemente/quic-go"
 )
 
@@ -20,18 +22,34 @@ func init() {
 
 type Count struct {
 	cnt int
+	m   sync.Mutex
 }
 
 func (c *Count) add(n int) {
-	c.cnt += 1
-	fmt.Printf("session count: %d\n", c.cnt)
+	if n == 0 {
+		return
+	}
+
+	c.m.Lock()
+
+	c.cnt += n
+
+	var upOrDown string
+	if n > 0 {
+		upOrDown = "↑"
+	} else {
+		upOrDown = "↓"
+	}
+	fmt.Printf("session count: %d%s\n", c.cnt, upOrDown)
+
+	c.m.Unlock()
 }
 
 func main() {
 	// make listener, specifying addr and tls config.
 	// QUIC needs to be used with TLS.
 	// see: https://www.rfc-editor.org/rfc/rfc9001.html
-	listener, err := quic.ListenAddr(addr, GenerateTLSConfig(), nil)
+	listener, err := quic.ListenAddr(addr, tls.GenerateTLSConfig(), nil)
 	if err != nil {
 		panic(err)
 	}
@@ -48,10 +66,6 @@ func main() {
 		c.add(1)
 
 		go func() {
-			defer func() {
-				c.add(-1)
-			}()
-
 			stream, err := sess.AcceptStream(context.Background())
 			if err != nil {
 				fmt.Printf("failed to accept stream: %s\n", err)
@@ -75,6 +89,8 @@ func main() {
 				return
 			}
 			fmt.Println(string(buf))
+
+			c.add(-1)
 		}()
 	}
 }
