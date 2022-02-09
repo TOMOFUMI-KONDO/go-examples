@@ -6,18 +6,18 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"os"
 
 	"github.com/lucas-clemente/quic-go"
 )
 
 var (
-	message = "hello"
-	addr    string
+	addr string
 )
 
 func init() {
-	flag.StringVar(&addr, "addr", "localhost:44300", "server address")
+	addr = *flag.String("addr", "localhost:44300", "server address")
 	flag.Parse()
 }
 
@@ -27,33 +27,38 @@ func main() {
 		panic(err)
 	}
 
-	tlsConf := &tls.Config{
-		InsecureSkipVerify: true,
-		NextProtos:         []string{"quic-echo-example"},
-		KeyLogWriter:       w,
-	}
-
-	session, err := quic.DialAddr(addr, tlsConf, nil)
+	session, err := quic.DialAddr(addr, genTLSConf(w), nil)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	stream, err := session.OpenStreamSync(context.Background())
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	defer stream.Close()
 
-	fmt.Printf("send: '%s'\n", message)
-	_, err = stream.Write([]byte(message))
+	fmt.Println("send: hello")
+	_, err = stream.Write([]byte(("hello")))
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
-	buf := make([]byte, len(message))
+	buf := make([]byte, len("hello"))
 	_, err = io.ReadFull(stream, buf)
-	if err != nil && err != io.EOF {
-		panic(err)
+	if err == io.EOF {
+		return
 	}
-	fmt.Printf("got: '%s'\n", buf)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("receive: %s\n", buf)
+}
+
+func genTLSConf(w io.Writer) *tls.Config {
+	return &tls.Config{
+		InsecureSkipVerify: true,
+		NextProtos:         []string{"quic-echo-example"},
+		KeyLogWriter:       w,
+	}
 }
