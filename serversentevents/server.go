@@ -15,7 +15,7 @@ func init() {
 	flag.Parse()
 }
 
-func main() {
+func serve() {
 	http.HandleFunc("/prime", handlePrimeSSE)
 
 	fmt.Printf("start http listening :%d", port)

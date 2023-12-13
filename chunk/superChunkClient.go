@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func main() {
+func superRequest() {
 	// open TCP socket
 	dialer := &net.Dialer{
 		Timeout:   30 * time.Second,

@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func main() {
+func ServeModifyResp() {
 	director := func(r *http.Request) {
 		r.URL.Scheme = "http"
 		r.URL.Host = ":8000"
@@ -18,7 +18,7 @@ func main() {
 	modifier := func(res *http.Response) error {
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			return fmt.Errorf("Reading body error: %w\n", err)
+			return fmt.Errorf("reading body error: %w", err)
 		}
 
 		newBody := bytes.NewBuffer(body)

@@ -15,7 +15,7 @@ func handlerWithCookie(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
+func serve() {
 	var httpServer http.Server
 	http.HandleFunc("/", handlerWithCookie)
 	log.Println("start http listening :18888")

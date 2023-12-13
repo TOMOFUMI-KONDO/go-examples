@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func main() {
+func simpleRequest() {
 	resp, err := http.Get("http://localhost:18888/chunked")
 	if err != nil {
 		panic(nil)

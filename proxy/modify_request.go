@@ -6,7 +6,7 @@ import (
 	"net/http/httputil"
 )
 
-func main() {
+func ServeModifyReq() {
 	director := func(r *http.Request) {
 		r.URL.Scheme = "http"
 		r.URL.Host = ":8000"

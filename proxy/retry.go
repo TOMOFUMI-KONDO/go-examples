@@ -33,7 +33,7 @@ func (RetryTransport) RoundTrip(r *http.Request) (resp *http.Response, err error
 	for i := 0; i < 3; i++ {
 		resp, err := http.DefaultTransport.RoundTrip(r)
 		if err != nil {
-			log.Printf("failed to RoundTrip: %w\n", err)
+			log.Printf("failed to RoundTrip: %v\n", err)
 			time.Sleep(time.Second)
 			continue
 		}

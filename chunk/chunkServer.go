@@ -21,7 +21,7 @@ func handlerChunkResponse(w http.ResponseWriter, r *http.Request) {
 	flusher.Flush()
 }
 
-func main() {
+func serve() {
 	var httpServer http.Server
 	http.HandleFunc("/chunked", handlerChunkResponse)
 	log.Println("start http listening :18888")

@@ -5,12 +5,7 @@ import (
 	"net/rpc/jsonrpc"
 )
 
-// arguments
-type Args struct {
-	A, B int
-}
-
-func main() {
+func req() {
 	client, err := jsonrpc.Dial("tcp", "localhost:18888")
 	if err != nil {
 		panic(err)

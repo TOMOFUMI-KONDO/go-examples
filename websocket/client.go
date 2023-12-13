@@ -14,7 +14,7 @@ func init() {
 	flag.Parse()
 }
 
-func main() {
+func req() {
 	conn, _, err := websocket.DefaultDialer.Dial(host, nil)
 	if err != nil {
 		panic(err)

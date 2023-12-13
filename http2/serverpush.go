@@ -19,7 +19,7 @@ func init() {
 	}
 }
 
-func main() {
+func serve() {
 	http.HandleFunc("/", handleHtml)
 	http.HandleFunc("/image", handleImage)
 

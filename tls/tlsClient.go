@@ -7,7 +7,7 @@ import (
 	"net/http/httputil"
 )
 
-func main() {
+func req() {
 	cert, err := tls.LoadX509KeyPair("client.crt", "client.key")
 	if err != nil {
 		panic(nil)

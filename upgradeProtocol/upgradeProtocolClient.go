@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func main() {
+func Req() {
 	// open TCP socket
 	dialer := &net.Dialer{Timeout: 30 * time.Second, KeepAlive: 30 * time.Second}
 	conn, err := dialer.Dial("tcp", "localhost:18888")
