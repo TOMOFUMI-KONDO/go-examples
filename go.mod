@@ -1,6 +1,6 @@
 module github.com/TOMOFUMI-KONDO/go-sandbox
 
-go 1.17
+go 1.21
 
 require (
 	github.com/go-sql-driver/mysql v1.6.0
@@ -14,6 +14,7 @@ require (
 	github.com/cheekybits/genny v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0 // indirect
+	github.com/jmoiron/sqlx v1.3.5 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/marten-seemann/qtls-go1-16 v0.1.4 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.0 // indirect
