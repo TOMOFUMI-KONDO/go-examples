@@ -1,8 +1,8 @@
 package itemdb
 
 type Item struct {
-	ID   int
-	Name string
+	ID   int    `db:"id"`
+	Name string `db:"name"`
 }
 
 func NewItem(id int, name string) *Item {
